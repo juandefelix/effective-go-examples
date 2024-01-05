@@ -24,9 +24,19 @@ func findType(value interface{}) {
     }
 }
 
+func findString(value interface{}) {
+    if _, ok := value.(string); ok {
+        fmt.Println("This is a string!")
+    } else {
+        fmt.Println("Sorry, not a string")
+    }
+}
+
 func main() {
     luis := Person{ Name: "Luis", Age: 40}
 
     findType(luis)
     findType("luis")
+    findString(luis)
+    findString("luis")
 }
