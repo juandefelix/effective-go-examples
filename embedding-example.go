@@ -5,46 +5,34 @@ import (
 )
 
 type Talker interface {
-	Talk() string
+	Talk(string) string
 }
 
 type Listener interface {
 	Listen(string)
 }
 
-type Convo struct {
-	moderator string
+type ConvoParticipant struct {
+	name string
 	Talker
 	Listener
 }
 
-type ListeningPerson struct {
-	name string
-}
-
-type TalkingPerson struct {
-	name string
-}
-
-func(p TalkingPerson) Talk() string {
-	statement := "Hola Manola!"
+func(p ConvoParticipant) Talk(statement string) string {
 	fmt.Println(statement)
 	return statement
 }
 
-func(p ListeningPerson) Listen(statement string){
-	fmt.Println("I hear you!")
+func(p ConvoParticipant) Listen(statement string){
+	fmt.Printf("You said: \"%v\"", statement)
 }
 
 
 func main() {
-	talker := TalkingPerson{"Pepe"}
-	listener := ListeningPerson{"Manolo"}
-	convo := Convo{"Luis", talker, listener}
+	luis := ConvoParticipant{name: "Pepe"}
+	manolo := ConvoParticipant{name: "Manolo"}
 
-	fmt.Println("Conversation moderated by: ", convo.moderator)
-	statement := convo.Talk()
-	convo.Listen(statement)
-
+	statement := luis.Talk("Hola Manolo!")
+	manolo.Listen(statement)
 }
 
