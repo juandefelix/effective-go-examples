@@ -27,7 +27,12 @@ func sendRequests(clientRequests chan *SocialMediaPostRequest) {
 }
 
 func main() {
-	clientRequests := prepareRequests()
+	clientRequests := make(chan *SocialMediaPostRequest)
 
-	sendRequests(clientRequests)
+	go sendRequests(clientRequests)
+
+	request1, request2 := <-clientRequests, <-clientRequests // receive from c
+
+	fmt.Println(request1, request2)
+
 }
