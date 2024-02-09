@@ -13,9 +13,33 @@ func postToTikTok([]byte) bool {
 	return true
 }
 
-
 type SocialMediaPostRequest struct {
-	text []byte
+	text string
 	function func([]byte) bool
 	notifyChannel chan bool
+}
+
+func prepareRequests() chan SocialMediaPostRequest {
+	clientRequests := make(chan SocialMediaPostRequest)
+
+	instagramRequestSuccessChannel := make(chan bool)
+	tikTokRequestSuccessChannel := make(chan bool)
+
+	instagramPost := SocialMediaPostRequest{"Hello Instagram!", postToInstagram, instagramRequestSuccessChannel}
+	tikTokPost := SocialMediaPostRequest{"Hello TikTok!", postToTikTok, tikTokRequestSuccessChannel}
+
+	clientRequests <- instagramPost
+	clientRequests <- tikTokPost
+
+	return clientRequests
+}
+
+func sendRequests(clientRequests chan SocialMediaPostRequest) {
+	// TODO
+}
+
+func main() {
+	clientRequests := prepareRequests()
+
+	sendRequests(clientRequests)
 }
