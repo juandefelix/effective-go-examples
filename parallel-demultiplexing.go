@@ -16,23 +16,29 @@ func postToTikTok(text string) bool {
 type SocialMediaPostRequest struct {
 	text string
 	function func(string) bool
-	// notifyChannel chan int
 }
 
-func sendRequests(clientRequests chan *SocialMediaPostRequest) {
+func setClientRequests(clientRequests chan *SocialMediaPostRequest) {
 	instagramPost := &SocialMediaPostRequest{"Hello Instagram!", postToInstagram}
 	tikTokPost := &SocialMediaPostRequest{"Hello TikTok!", postToTikTok}
 	clientRequests <- instagramPost
 	clientRequests <- tikTokPost
+
+	close(clientRequests)
+}
+
+func processRequests(clientRequests chan *SocialMediaPostRequest) {
+	for request := range clientRequests {
+		fmt.Println(request.text, "sent!")
+	}
 }
 
 func main() {
 	clientRequests := make(chan *SocialMediaPostRequest)
 
-	go sendRequests(clientRequests)
+	go setClientRequests(clientRequests)
 
-	request1, request2 := <-clientRequests, <-clientRequests // receive from c
+	processRequests(clientRequests)
 
-	fmt.Println(request1, request2)
 
 }
